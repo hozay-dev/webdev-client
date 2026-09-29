@@ -2,7 +2,7 @@ import Link from "next/link";
 export default function TOC() {
   return (
     <div id="wd-toc">
-      <strong>Hozay Diaz</strong>
+      <strong>Jose Diaz</strong>
       <ul>
         <li>
           <Link href="/labs" id="wd-home-link">
