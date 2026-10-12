@@ -48,3 +48,21 @@
   border-left: 3px solid black !important;
   font-weight: 600;
 }
+/* Classic meme caption: white block letters with a black outline,
+   drawn as eight thin shadows around each letter */
+.wd-meme-caption {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black",
+    sans-serif;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-shadow:
+    2px 2px 0 #000,
+    -2px 2px 0 #000,
+    2px -2px 0 #000,
+    -2px -2px 0 #000,
+    0 2px 0 #000,
+    2px 0 0 #000,
+    0 -2px 0 #000,
+    -2px 0 0 #000;
+}
