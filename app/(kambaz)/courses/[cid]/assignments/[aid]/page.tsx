@@ -1,4 +1,5 @@
 import Link from "next/link";
+import * as db from "../../../../database";
 
 // Shared Tailwind form utilities: labels above fields on small screens,
 // right-aligned beside them from md up, and full-width bordered controls.
@@ -15,7 +16,8 @@ export default async function AssignmentEditor({
 }: {
   params: Promise<{ cid: string; aid: string }>;
 }) {
-  const { cid } = await params;
+  const { cid, aid } = await params;
+  const assignment = db.assignments.find((a) => a._id === aid);
   return (
     <div id="wd-assignments-editor" className="max-w-3xl">
       <label htmlFor="wd-name" className={STACKED_LABEL}>
@@ -23,9 +25,10 @@ export default async function AssignmentEditor({
       </label>
       <input
         id="wd-name"
-        defaultValue="A1 - ENV + HTML"
+        defaultValue={assignment?.title ?? ""}
         className={`${FIELD} mb-4`}
       />
+      <p className="mb-4 text-sm text-neutral-600">Assignment id: {aid}</p>
       <label htmlFor="wd-description" className={STACKED_LABEL}>
         Description
       </label>
@@ -33,14 +36,14 @@ export default async function AssignmentEditor({
         id="wd-description"
         rows={5}
         className={`${FIELD} mb-6`}
-        defaultValue="The assignment is available online Submit a link to the landing page of your Web application running on Vercel."
+        defaultValue={assignment?.description ?? ""}
       />
       <div className={ROW}>
         <label htmlFor="wd-points" className={ROW_LABEL}>
           Points
         </label>
         <div className={ROW_FIELD}>
-          <input id="wd-points" defaultValue={100} className={FIELD} />
+          <input id="wd-points" defaultValue={assignment?.points ?? 100} className={FIELD} />
         </div>
       </div>
       <div className={ROW}>
@@ -134,7 +137,7 @@ export default async function AssignmentEditor({
           <input
             type="date"
             id="wd-due-date"
-            defaultValue="2026-05-13"
+            defaultValue={assignment?.due}
             className={`${FIELD} mb-4`}
           />
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -145,7 +148,7 @@ export default async function AssignmentEditor({
               <input
                 type="date"
                 id="wd-available-from"
-                defaultValue="2026-05-06"
+                defaultValue={assignment?.available}
                 className={FIELD}
               />
             </div>
@@ -163,10 +166,6 @@ export default async function AssignmentEditor({
           </div>
         </div>
       </div>
-      <label htmlFor="wd-ai-editor-notes" className={STACKED_LABEL}>
-        Sample notes
-      </label>
-      <textarea id="wd-ai-editor-notes" rows={3} className={`${FIELD} mb-4`} />
       <hr className="my-4 border-neutral-300" />
       <div className="flex justify-end gap-2">
         <Link
