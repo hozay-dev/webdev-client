@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import ClickEvent from "./ClickEvent";
 import PassingDataOnEvent from "./PassingDataOnEvent";
 import PassingFunctions from "./PassingFunctions";
@@ -16,6 +17,8 @@ import PropDrilling from "./PropDrilling";
 import UrlEncoding from "./UrlEncoding";
 import ContextExamples from "./context/ContextExamples";
 import ZustandExamples from "./zustand/ZustandExamples";
+import ReduxExamples from "./redux/ReduxExamples";
+import Effect from "./Effect";
 
 export default function Lab4() {
   const sayHello = (message: string) => {
@@ -24,6 +27,15 @@ export default function Lab4() {
   return (
     <div id="wd-lab4">
       <h2>Lab 4</h2>
+      {/* these two are their own pages so they get links instead */}
+      <ul>
+        <li>
+          <Link href="/labs/lab4/hooks">Writing Your Own Hooks</Link>
+        </li>
+        <li>
+          <Link href="/labs/lab4/profile-form">Profile Form Three Ways</Link>
+        </li>
+      </ul>
       <ClickEvent />
       <PassingDataOnEvent />
       <PassingFunctions
@@ -45,6 +57,8 @@ export default function Lab4() {
       <UrlEncoding />
       <ContextExamples />
       <ZustandExamples />
+      <ReduxExamples />
+      <Effect />
     </div>
   );
 }
