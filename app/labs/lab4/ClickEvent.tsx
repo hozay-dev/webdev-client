@@ -12,6 +12,7 @@ export default function ClickEvent() {
   return (
     <div id="wd-click-event">
       <h2>Click Event</h2>
+      {/* no parentheses on hello, react calls it when the click happens */}
       <button
         type="button"
         onClick={hello}

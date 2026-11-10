@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 export default function useLocalStorage<T>(key: string, initial: T) {
   const [value, setValue] = useState<T>(initial);
+  // only read localStorage after the first render so the server and browser html match
   useEffect(() => {
     const first = requestAnimationFrame(() => {
       const saved = window.localStorage.getItem(key);

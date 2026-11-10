@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 export default function Effect() {
   const [name, setName] = useState("Kambaz");
   const [count, setCount] = useState(0);
+  // runs after the paint, then again only when name or count change
   useEffect(() => {
     document.title = `${name} — clicked ${count}`;
     console.log(name, count);

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 export default function Counter() {
+  // calling the setter is what makes react render again
   const [count, setCount] = useState(7);
   return (
     <div id="wd-counter">

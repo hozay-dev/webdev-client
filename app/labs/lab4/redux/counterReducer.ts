@@ -3,6 +3,7 @@ const counterSlice = createSlice({
   name: "counter",
   initialState: { count: 7 },
   reducers: {
+    // looks like mutating but immer turns it into a new state object
     up: (state) => {
       state.count += 1;
     },

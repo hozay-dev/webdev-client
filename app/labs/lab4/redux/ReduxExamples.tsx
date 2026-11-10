@@ -7,6 +7,7 @@ import AddRedux from "./AddRedux";
 import ReduxTodos from "./ReduxTodos";
 export default function ReduxExamples() {
   return (
+    // redux needs this provider around everything that reads the store, zustand didnt
     <Provider store={store}>
       <div id="wd-redux-examples">
         <h2>Redux Toolkit</h2>

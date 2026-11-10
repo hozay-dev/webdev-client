@@ -6,6 +6,7 @@ export default function ObjectStateVariable() {
     <div id="wd-object-state-variables">
       <h2>Object State Variables</h2>
       <pre>{JSON.stringify(person, null, 2)}</pre>
+      {/* spread copies the old person, then i only overwrite the field that changed */}
       <input
         className="mb-2 block w-full max-w-sm rounded border border-neutral-300 px-3 py-1.5"
         value={person.name}

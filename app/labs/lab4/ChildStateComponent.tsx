@@ -5,6 +5,7 @@ export default function ChildStateComponent({
   counter: number;
   setCounter: (counter: number) => void;
 }) {
+  // the child doesnt own this counter, it just uses what the parent handed it
   return (
     <div id="wd-child-state">
       <h3>Counter {counter}</h3>

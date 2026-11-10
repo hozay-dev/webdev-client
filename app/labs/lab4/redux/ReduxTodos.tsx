@@ -5,6 +5,7 @@ import ReduxTodoForm from "./ReduxTodoForm";
 import ReduxTodoItem from "./ReduxTodoItem";
 export default function ReduxTodos() {
   const { todos } = useSelector((state: RootState) => state.todosReducer);
+  // these live up here so the form and the item can both use them
   const [title, setTitle] = useState("Learn Mongo");
   const [editingId, setEditingId] = useState<string | null>(null);
   return (

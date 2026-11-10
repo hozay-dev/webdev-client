@@ -14,6 +14,7 @@ export function CounterProvider({ children }: { children: ReactNode }) {
 }
 export function useCounterContext() {
   const value = useContext(CounterContext);
+  // blow up right away if i forget the provider instead of getting a silent null
   if (!value) {
     throw new Error("useCounterContext must be used inside CounterProvider");
   }

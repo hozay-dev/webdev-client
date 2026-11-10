@@ -48,6 +48,7 @@ export default function CourseCard({
           >
             Go
           </button>
+          {/* these buttons sit inside the Link so preventDefault stops it from navigating */}
           <button
             type="button"
             id="wd-edit-course-click"

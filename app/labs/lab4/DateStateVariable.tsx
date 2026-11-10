@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+// date inputs only take YYYY-MM-DD, and months start at 0 so add 1
 function dateObjectToHtmlDateString(date: Date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

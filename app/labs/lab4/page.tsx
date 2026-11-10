@@ -27,7 +27,7 @@ export default function Lab4() {
   return (
     <div id="wd-lab4">
       <h2>Lab 4</h2>
-      {/* these two are their own pages so they get links instead */}
+      {/* these two are separate pages so i just link to them */}
       <ul>
         <li>
           <Link href="/labs/lab4/hooks">Writing Your Own Hooks</Link>

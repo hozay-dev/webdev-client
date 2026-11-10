@@ -10,6 +10,7 @@ export default function StringStateVariables() {
       <p>{firstName}</p>
       <p>{nickName}</p>
       <p>{firstName} {lastName}</p>
+      {/* bound with value so the input and the text above stay in sync */}
       <input
         className="w-full max-w-sm rounded border border-neutral-300 px-3 py-1.5"
         value={firstName}

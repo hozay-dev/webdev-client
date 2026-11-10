@@ -19,6 +19,7 @@ export default function Signin() {
     );
     if (!user) return;
     setCurrentUser(user);
+    // router in a click handler, redirect only works while rendering
     router.push("/dashboard");
   };
   return (

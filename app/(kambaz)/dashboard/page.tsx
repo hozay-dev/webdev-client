@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [course, setCourse] = useState<Course>(emptyCourse);
   const [showAllCourses, setShowAllCourses] = useState(false);
   const { currentUser } = useAccountContext();
-  // nobody signed in still sees everything so add/edit/delete has something to click
+  // signed out shows everything, signed in only shows my courses unless the toggle is on
   const visibleCourses =
     currentUser && !showAllCourses
       ? courses.filter((c) =>
@@ -83,7 +83,7 @@ export default function Dashboard() {
         onChange={(e) => setCourse({ ...course, number: e.target.value })}
         id="wd-course-number"
       />
-      {/* startDate is already YYYY-MM-DD so the date input can use it as is */}
+      {/* startDate is already YYYY-MM-DD so no converting like in the lab */}
       <input
         type="date"
         className="mb-3 block w-full max-w-xl rounded border border-neutral-300 px-3 py-1.5"

@@ -9,6 +9,7 @@ export default function Profile() {
   const [profile, setProfile] = useState<User | null>(null);
   const { currentUser, setCurrentUser } = useAccountContext();
   const router = useRouter();
+  // copy the user into a local form so typing doesnt change the context
   useEffect(() => {
     if (!currentUser) {
       router.push("/account/signin");
@@ -72,7 +73,7 @@ export default function Profile() {
         <option value="FACULTY">Faculty</option>
         <option value="STUDENT">Student</option>
       </select>
-      {/* only now does the edited copy go back into the context */}
+      {/* update is what actually puts my edits back in the context */}
       <button
         type="button"
         onClick={() => setCurrentUser(profile)}

@@ -1,5 +1,6 @@
 import { useCounterStore } from "./counterStore";
 export default function ZustandCounter() {
+  // picking one field at a time so this only re-renders when that field changes
   const count = useCounterStore((state) => state.count);
   const up = useCounterStore((state) => state.up);
   const down = useCounterStore((state) => state.down);

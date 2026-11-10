@@ -26,7 +26,7 @@ export default function CoursesLayout({
       (enrollment) =>
         enrollment.user === currentUser._id && enrollment.course === courseId,
     );
-  // only people enrolled in this course get in, everyone else goes back
+  // not enrolled (or not signed in) means back to the dashboard
   useEffect(() => {
     if (!enrolled) {
       router.push("/dashboard");

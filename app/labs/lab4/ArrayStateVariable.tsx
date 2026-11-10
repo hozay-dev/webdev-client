@@ -5,6 +5,7 @@ export default function ArrayStateVariable() {
   const addElement = () => {
     setArray([...array, Math.floor(Math.random() * 100)]);
   };
+  // filter gives back a new array, never change the old one in place
   const deleteElement = (index: number) => {
     setArray(array.filter((_item, i) => i !== index));
   };

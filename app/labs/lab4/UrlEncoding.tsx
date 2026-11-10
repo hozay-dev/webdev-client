@@ -5,6 +5,7 @@ import Link from "next/link";
 export default function UrlEncoding() {
   const [a, setA] = useState("5");
   const [b, setB] = useState("10");
+  // third number goes in both the query string and the path
   const [c, setC] = useState("2");
   const router = useRouter();
   const baseUrl = "/labs/lab4/url-encoding";

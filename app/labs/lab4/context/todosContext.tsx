@@ -1,3 +1,4 @@
+// .tsx and not .ts because the provider returns jsx
 import { createContext, useContext, useState, type ReactNode } from "react";
 export type Todo = {
   id: string;

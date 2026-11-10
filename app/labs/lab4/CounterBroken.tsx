@@ -1,5 +1,6 @@
 "use client";
 export default function CounterBroken() {
+  // count changes in memory but react never renders again, so the heading stays 7
   let count = 7;
   return (
     <div id="wd-counter-broken">

@@ -29,7 +29,7 @@ export default function AssignmentEditor() {
   const updateAssignment = useAssignmentsStore(
     (state) => state.updateAssignment,
   );
-  // the form edits a copy, the store only changes on save
+  // working on a copy so cancel doesnt change anything in the store
   const [assignment, setAssignment] = useState<Assignment>(
     assignments.find((a) => a._id === aid) ?? {
       ...emptyAssignment,

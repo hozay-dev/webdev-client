@@ -17,6 +17,7 @@ export default function PassingDataOnEvent() {
       >
         Pass Data
       </button>
+      {/* wrapped in an arrow so the string only gets passed on click */}
       <button
         type="button"
         onClick={() => lifeIs("Life is Good!")}

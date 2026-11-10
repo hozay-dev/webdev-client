@@ -10,6 +10,7 @@ export default function Module({ module }: { module: CourseModule }) {
     <li className="wd-module mb-5 overflow-hidden border border-neutral-400 p-0 text-xl">
       <div className="wd-title flex items-center justify-between bg-neutral-200 p-3 ps-2">
         <span>
+          {/* pencil turns editing on, typing saves the name, enter turns editing off */}
           {module.editing ? (
             <input
               className="w-1/2 rounded border border-neutral-300 px-2 py-1 text-base"
