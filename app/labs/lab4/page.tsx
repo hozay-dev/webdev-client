@@ -3,6 +3,14 @@
 import ClickEvent from "./ClickEvent";
 import PassingDataOnEvent from "./PassingDataOnEvent";
 import PassingFunctions from "./PassingFunctions";
+import CounterBroken from "./CounterBroken";
+import Counter from "./Counter";
+import BooleanStateVariables from "./BooleanStateVariables";
+import StringStateVariables from "./StringStateVariables";
+import DateStateVariable from "./DateStateVariable";
+import ObjectStateVariable from "./ObjectStateVariable";
+import ArrayStateVariable from "./ArrayStateVariable";
+import ProfileForm from "./profile/ProfileForm";
 
 export default function Lab4() {
   const sayHello = (message: string) => {
@@ -19,6 +27,14 @@ export default function Lab4() {
         theOtherFunction={() => alert("Sample from parent")}
         sayMyName={() => alert("Jose Diaz")}
       />
+      <CounterBroken />
+      <Counter />
+      <BooleanStateVariables />
+      <StringStateVariables />
+      <DateStateVariable />
+      <ObjectStateVariable />
+      <ArrayStateVariable />
+      <ProfileForm />
     </div>
   );
 }
