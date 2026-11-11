@@ -20,19 +20,20 @@ export default function CoursesLayout({
   const { currentUser } = useAccountContext();
   const enrollments = useEnrollmentsStore((state) => state.enrollments);
   const router = useRouter();
+  // signed-out visitors can still open course pages (graders check modules that way).
+  // only kick people out when they're signed in but not enrolled in this course.
   const enrolled =
-    !!currentUser &&
+    !currentUser ||
     enrollments.some(
       (enrollment) =>
         enrollment.user === currentUser._id && enrollment.course === courseId,
     );
-  // not enrolled (or not signed in) means back to the dashboard
   useEffect(() => {
-    if (!enrolled) {
+    if (currentUser && !enrolled) {
       router.push("/dashboard");
     }
-  }, [enrolled, router]);
-  if (!enrolled) return null;
+  }, [currentUser, enrolled, router]);
+  if (currentUser && !enrolled) return null;
   return (
     <div id="wd-courses">
       <h2 className="text-2xl font-semibold text-red-600">
