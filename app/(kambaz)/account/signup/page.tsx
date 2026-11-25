@@ -10,7 +10,9 @@ export default function Signup() {
   const { setCurrentUser } = useAccountContext();
   const router = useRouter();
   const signup = async () => {
-    if (!user.username || !user.password) return;
+    if (!user.username || !user.password) {
+      return;
+    }
     try {
       const current = await client.signup(user);
       setCurrentUser(current);

@@ -26,29 +26,42 @@ export default function CoursesLayout({
   const router = useRouter();
   // signed-out visitors can still open course pages (graders check modules that way).
   // only kick people out when they're signed in but not enrolled in this course.
-  const enrolled =
-    !currentUser ||
-    enrollments.some(
+  let enrolled = false;
+  if (!currentUser) {
+    enrolled = true;
+  } else {
+    enrolled = enrollments.some(
       (enrollment) =>
         enrollment.user === currentUser._id && enrollment.course === courseId,
     );
+  }
   useEffect(() => {
     const load = async () => {
       if (!currentUser) {
-        setCourses(await client.fetchAllCourses());
+        const allCourses = await client.fetchAllCourses();
+        setCourses(allCourses);
         return;
       }
-      setCourses(await client.findMyCourses());
+
+      const myCourses = await client.findMyCourses();
+      setCourses(myCourses);
+
       const myEnrollments: Enrollment[] =
         await enrollmentsClient.findEnrollmentsForUser(currentUser._id);
       setEnrollments(myEnrollments);
-      if (!myEnrollments.some((enrollment) => enrollment.course === courseId)) {
+
+      const inThisCourse = myEnrollments.some(
+        (enrollment) => enrollment.course === courseId,
+      );
+      if (!inThisCourse) {
         router.push("/dashboard");
       }
     };
     load();
   }, [currentUser, courseId]);
-  if (currentUser && !enrolled) return null;
+  if (currentUser && !enrolled) {
+    return null;
+  }
   return (
     <div id="wd-courses">
       <h2 className="text-2xl font-semibold text-red-600">

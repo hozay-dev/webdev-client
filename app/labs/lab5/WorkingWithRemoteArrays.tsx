@@ -48,21 +48,32 @@ export default function WorkingWithRemoteArrays() {
       <input value={todo.title} onChange={(e) => setTodo({ ...todo, title: e.target.value })}
         className="mr-2 rounded border border-neutral-300 px-2 py-1" />
       <div className="mt-2">
-        <a href={`${API}/${todo.id}/completed/${todo.completed}`} id="wd-update-todo-completed"
-          className="mr-2 rounded bg-blue-600 px-3 py-1.5 text-sm text-white">
+        <a
+          href={`${API}/${todo.id}/completed/${todo.completed}`}
+          id="wd-update-todo-completed"
+          className="mr-2 rounded bg-blue-600 px-3 py-1.5 text-sm text-white"
+        >
           Complete Todo ID = {todo.id}
         </a>
-        <input type="checkbox" checked={todo.completed}
-          onChange={(e) => setTodo({ ...todo, completed: e.target.checked })} />
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={(e) => setTodo({ ...todo, completed: e.target.checked })}
+        />
       </div>
       <div className="mt-2">
-        <a href={`${API}/${todo.id}/description/${todo.description}`} id="wd-update-todo-description"
-          className="mr-2 rounded bg-blue-600 px-3 py-1.5 text-sm text-white">
+        <a
+          href={`${API}/${todo.id}/description/${todo.description}`}
+          id="wd-update-todo-description"
+          className="mr-2 rounded bg-blue-600 px-3 py-1.5 text-sm text-white"
+        >
           Describe Todo ID = {todo.id}
         </a>
-        <input value={todo.description}
+        <input
+          value={todo.description}
           className="rounded border border-neutral-300 px-2 py-1"
-          onChange={(e) => setTodo({ ...todo, description: e.target.value })} />
+          onChange={(e) => setTodo({ ...todo, description: e.target.value })}
+        />
       </div>
       <hr />
     </div>

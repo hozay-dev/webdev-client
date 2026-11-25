@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+
 const OPERATIONS = [
   { value: "add", symbol: "+" },
   { value: "subtract", symbol: "-" },
@@ -7,30 +8,40 @@ const OPERATIONS = [
   { value: "divide", symbol: "÷" },
   { value: "power", symbol: "^" },
 ];
+
 export default function CalculatorNextWebApiClient() {
   const [a, setA] = useState("");
   const [b, setB] = useState("");
   const [operation, setOperation] = useState("add");
   const [result, setResult] = useState("");
   const [error, setError] = useState("");
+
   const calculate = async (newOperation: string) => {
-    const response = await fetch(
-      `/api/lab5/calculator?a=${a}&b=${b}&operation=${newOperation}`,
-    );
+    const url = `/api/lab5/calculator?a=${a}&b=${b}&operation=${newOperation}`;
+    const response = await fetch(url);
     const data = await response.json();
+
     if (!response.ok) {
       setError(data.error);
       setResult("");
       return;
     }
-    const symbol = OPERATIONS.find((o) => o.value === data.operation)?.symbol;
+
+    const op = OPERATIONS.find((o) => o.value === data.operation);
+    let symbol;
+    if (op) {
+      symbol = op.symbol;
+    }
     setError("");
     setResult(`${data.a} ${symbol} ${data.b} = ${data.result}`);
   };
+
   return (
     <div id="wd-lab5-next-calculator" className="p-2">
       <h3>Calculator (Next.js Web API)</h3>
-      <label htmlFor="a-input" className="mr-2">A:</label>
+      <label htmlFor="a-input" className="mr-2">
+        A:
+      </label>
       <input
         type="number"
         placeholder="A"
@@ -40,7 +51,9 @@ export default function CalculatorNextWebApiClient() {
         onChange={(e) => setA(e.target.value)}
       />
       <br />
-      <label htmlFor="b-input" className="mr-2">B:</label>
+      <label htmlFor="b-input" className="mr-2">
+        B:
+      </label>
       <input
         type="number"
         placeholder="B"
@@ -50,7 +63,9 @@ export default function CalculatorNextWebApiClient() {
         onChange={(e) => setB(e.target.value)}
       />
       <br />
-      <label htmlFor="operation-select" className="mr-2">Operation:</label>
+      <label htmlFor="operation-select" className="mr-2">
+        Operation:
+      </label>
       {/* left ^ out of the route on purpose */}
       <select
         id="operation-select"

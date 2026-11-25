@@ -18,7 +18,8 @@ export default function PeopleTable() {
   const [user, setUser] = useState<User>(emptyUser);
   useEffect(() => {
     const load = async () => {
-      setUsers(await client.findUsersForCourse(courseId));
+      const people = await client.findUsersForCourse(courseId);
+      setUsers(people);
     };
     load();
   }, [courseId]);
@@ -30,7 +31,13 @@ export default function PeopleTable() {
   };
   const onUpdateUser = async () => {
     const saved = await client.updateUser(user);
-    setUsers(users.map((u) => (u._id === saved._id ? saved : u)));
+    const newUsers = users.map((u) => {
+      if (u._id === saved._id) {
+        return saved;
+      }
+      return u;
+    });
+    setUsers(newUsers);
     if (saved._id === currentUser?._id) {
       setCurrentUser(saved);
     }

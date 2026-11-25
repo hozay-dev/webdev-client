@@ -32,14 +32,18 @@ export default function QueryParameters() {
           href={`${HTTP_SERVER}/lab5/calculator?operation=subtract&a=${a}&b=${b}`}>
           Subtract {a} - {b}
         </a>
-        <a id="wd-query-parameter-multiply"
+        <a
+          id="wd-query-parameter-multiply"
           className="rounded bg-green-700 px-3 py-1.5 text-sm text-white"
-          href={`${HTTP_SERVER}/lab5/calculator?operation=multiply&a=${a}&b=${b}`}>
+          href={`${HTTP_SERVER}/lab5/calculator?operation=multiply&a=${a}&b=${b}`}
+        >
           Multiply {a} × {b}
         </a>
-        <a id="wd-query-parameter-divide"
+        <a
+          id="wd-query-parameter-divide"
           className="rounded bg-amber-600 px-3 py-1.5 text-sm text-white"
-          href={`${HTTP_SERVER}/lab5/calculator?operation=divide&a=${a}&b=${b}`}>
+          href={`${HTTP_SERVER}/lab5/calculator?operation=divide&a=${a}&b=${b}`}
+        >
           Divide {a} ÷ {b}
         </a>
       </div>

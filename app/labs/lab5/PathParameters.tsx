@@ -32,14 +32,18 @@ export default function PathParameters() {
           href={`${HTTP_SERVER}/lab5/subtract/${a}/${b}`}>
           Subtract {a} - {b}
         </a>
-        <a id="wd-path-parameter-multiply"
+        <a
+          id="wd-path-parameter-multiply"
           className="rounded bg-green-700 px-3 py-1.5 text-sm text-white"
-          href={`${HTTP_SERVER}/lab5/multiply/${a}/${b}`}>
+          href={`${HTTP_SERVER}/lab5/multiply/${a}/${b}`}
+        >
           Multiply {a} × {b}
         </a>
-        <a id="wd-path-parameter-divide"
+        <a
+          id="wd-path-parameter-divide"
           className="rounded bg-amber-600 px-3 py-1.5 text-sm text-white"
-          href={`${HTTP_SERVER}/lab5/divide/${a}/${b}`}>
+          href={`${HTTP_SERVER}/lab5/divide/${a}/${b}`}
+        >
           Divide {a} ÷ {b}
         </a>
       </div>

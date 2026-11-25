@@ -13,7 +13,9 @@ export default function Signin() {
   const { setCurrentUser } = useAccountContext();
   const router = useRouter();
   const signin = async () => {
-    if (!credentials.username || !credentials.password) return;
+    if (!credentials.username || !credentials.password) {
+      return;
+    }
     try {
       const user = await client.signin(credentials);
       if (!user) return;

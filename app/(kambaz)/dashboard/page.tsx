@@ -27,12 +27,15 @@ export default function Dashboard() {
       if (currentUser && !showAllCourses) {
         setCourses(await client.findMyCourses());
       } else {
-        setCourses(await client.fetchAllCourses());
+        const allCourses = await client.fetchAllCourses();
+        setCourses(allCourses);
       }
+
       if (currentUser) {
-        setEnrollments(
-          await enrollmentsClient.findEnrollmentsForUser(currentUser._id),
+        const userEnrollments = await enrollmentsClient.findEnrollmentsForUser(
+          currentUser._id,
         );
+        setEnrollments(userEnrollments);
       }
     };
     load();
@@ -54,18 +57,28 @@ export default function Dashboard() {
     updateCourse(saved);
   };
   const onEnroll = async (courseId: string) => {
-    if (!currentUser) return;
-    setEnrollments(
-      await enrollmentsClient.enrollIntoCourse(currentUser._id, courseId),
+    if (!currentUser) {
+      return;
+    }
+    const userEnrollments = await enrollmentsClient.enrollIntoCourse(
+      currentUser._id,
+      courseId,
     );
+    setEnrollments(userEnrollments);
   };
   const onUnenroll = async (courseId: string) => {
-    if (!currentUser) return;
-    setEnrollments(
-      await enrollmentsClient.unenrollFromCourse(currentUser._id, courseId),
+    if (!currentUser) {
+      return;
+    }
+    const userEnrollments = await enrollmentsClient.unenrollFromCourse(
+      currentUser._id,
+      courseId,
     );
+    setEnrollments(userEnrollments);
+
     if (!showAllCourses) {
-      setCourses(await client.findMyCourses());
+      const myCourses = await client.findMyCourses();
+      setCourses(myCourses);
     }
   };
   return (
