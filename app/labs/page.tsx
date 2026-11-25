@@ -19,7 +19,9 @@ export default function Labs() {
           </Link>
         </li>
         <li>
-          <Link href="/labs/lab5">Lab 5</Link>
+          <Link href="/labs/lab5" id="wd-lab5-link">
+            Lab 5: RESTful Web APIs
+          </Link>
         </li>
         <li>
           <Link href="/" id="wd-kambaz-link">
@@ -29,6 +31,16 @@ export default function Labs() {
         <li>
           <a href="https://github.com/hozay-dev/webdev-client" id="wd-github">
             GitHub repository
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/hozay-dev/webdev-server" id="wd-github-node">
+            Node.js HTTP Server GitHub
+          </a>
+        </li>
+        <li>
+          <a href={process.env.NEXT_PUBLIC_HTTP_SERVER} id="wd-http-server">
+            HTTP Server (Render)
           </a>
         </li>
       </ul>

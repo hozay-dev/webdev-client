@@ -1,65 +1,94 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { FaUserCircle } from "react-icons/fa";
-import * as db from "../../../../database";
-import { emptyUser, type User } from "../../../../account/AccountContext";
-import { useEnrollmentsStore } from "../../../../store/enrollmentsStore";
+import * as client from "../client";
+import * as enrollmentsClient from "../../../../enrollments/client";
+import {
+  emptyUser,
+  useAccountContext,
+  type User,
+} from "../../../../account/AccountContext";
 export default function PeopleTable() {
   const { cid } = useParams();
-  const enrollments = useEnrollmentsStore((state) => state.enrollments);
-  const enroll = useEnrollmentsStore((state) => state.enroll);
-  const unenroll = useEnrollmentsStore((state) => state.unenroll);
-  // new people only live on this page for now, their enrollment is in the store
-  const [users, setUsers] = useState<User[]>(db.users);
+  const courseId = String(cid);
+  const { currentUser, setCurrentUser } = useAccountContext();
+  const isFaculty = currentUser?.role === "FACULTY";
+  const [users, setUsers] = useState<User[]>([]);
   const [user, setUser] = useState<User>(emptyUser);
-  const enrolled = users.filter((usr) =>
-    enrollments.some(
-      (enrollment) => enrollment.user === usr._id && enrollment.course === cid,
-    ),
-  );
-  const addPerson = () => {
-    const newUser = { ...user, _id: crypto.randomUUID() };
+  useEffect(() => {
+    const load = async () => {
+      setUsers(await client.findUsersForCourse(courseId));
+    };
+    load();
+  }, [courseId]);
+  const onAddUser = async () => {
+    const newUser = await client.createUser(user);
+    await enrollmentsClient.enrollIntoCourse(newUser._id, courseId);
     setUsers([...users, newUser]);
-    enroll(newUser._id, String(cid));
     setUser(emptyUser);
+  };
+  const onUpdateUser = async () => {
+    const saved = await client.updateUser(user);
+    setUsers(users.map((u) => (u._id === saved._id ? saved : u)));
+    if (saved._id === currentUser?._id) {
+      setCurrentUser(saved);
+    }
+    setUser(emptyUser);
+  };
+  const onDeleteUser = async (userId: string) => {
+    await client.deleteUser(userId);
+    setUsers(users.filter((u) => u._id !== userId));
   };
   return (
     <div id="wd-people-table" className="overflow-x-auto">
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <input
-          id="wd-people-first-name"
-          placeholder="First name"
-          className="rounded border border-neutral-300 px-3 py-1.5 text-sm"
-          value={user.firstName}
-          onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-        />
-        <input
-          id="wd-people-last-name"
-          placeholder="Last name"
-          className="rounded border border-neutral-300 px-3 py-1.5 text-sm"
-          value={user.lastName}
-          onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-        />
-        <select
-          id="wd-people-role"
-          className="rounded border border-neutral-300 bg-white px-3 py-1.5 text-sm"
-          value={user.role}
-          onChange={(e) => setUser({ ...user, role: e.target.value })}
-        >
-          <option value="STUDENT">Student</option>
-          <option value="TA">TA</option>
-          <option value="FACULTY">Faculty</option>
-        </select>
-        <button
-          type="button"
-          id="wd-people-add-click"
-          onClick={addPerson}
-          className="rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white"
-        >
-          Add Person
-        </button>
-      </div>
+      {isFaculty && (
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <input
+            id="wd-people-first-name"
+            placeholder="First name"
+            className="rounded border border-neutral-300 px-3 py-1.5 text-sm"
+            value={user.firstName}
+            onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+          />
+          <input
+            id="wd-people-last-name"
+            placeholder="Last name"
+            className="rounded border border-neutral-300 px-3 py-1.5 text-sm"
+            value={user.lastName}
+            onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+          />
+          <select
+            id="wd-people-role"
+            className="rounded border border-neutral-300 bg-white px-3 py-1.5 text-sm"
+            value={user.role}
+            onChange={(e) => setUser({ ...user, role: e.target.value })}
+          >
+            <option value="STUDENT">Student</option>
+            <option value="TA">TA</option>
+            <option value="FACULTY">Faculty</option>
+          </select>
+          {user._id ? (
+            <button
+              type="button"
+              id="wd-people-update-click"
+              onClick={onUpdateUser}
+              className="rounded bg-yellow-400 px-3 py-1.5 text-sm font-medium"
+            >
+              Update Person
+            </button>
+          ) : (
+            <button
+              type="button"
+              id="wd-people-add-click"
+              onClick={onAddUser}
+              className="rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white"
+            >
+              Add Person
+            </button>
+          )}
+        </div>
+      )}
       <table className="w-full border-collapse text-left text-sm">
         <thead>
           <tr className="border-b border-neutral-300">
@@ -73,7 +102,7 @@ export default function PeopleTable() {
           </tr>
         </thead>
         <tbody>
-          {enrolled.map((user) => (
+          {users.map((user) => (
             <tr key={user._id} className="odd:bg-neutral-50">
               <td className="wd-full-name p-2 text-nowrap">
                 <FaUserCircle className="me-2 inline align-middle text-4xl text-neutral-500" />
@@ -85,14 +114,25 @@ export default function PeopleTable() {
               <td className="wd-role p-2">{user.role}</td>
               <td className="wd-last-activity p-2">{user.lastActivity}</td>
               <td className="wd-total-activity p-2">{user.totalActivity}</td>
-              <td className="p-2">
-                <button
-                  type="button"
-                  onClick={() => unenroll(user._id, String(cid))}
-                  className="rounded bg-neutral-200 px-2 py-0.5 text-sm"
-                >
-                  Remove
-                </button>
+              <td className="p-2 text-nowrap">
+                {isFaculty && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setUser(user)}
+                      className="me-2 rounded bg-neutral-200 px-2 py-0.5 text-sm"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDeleteUser(user._id)}
+                      className="rounded bg-neutral-200 px-2 py-0.5 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}

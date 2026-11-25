@@ -4,10 +4,11 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { useModulesStore } from "../../../store/modulesStore";
 export default function ModuleControlButtons({
   moduleId,
+  deleteModule,
 }: {
   moduleId: string;
+  deleteModule: (moduleId: string) => void;
 }) {
-  const deleteModule = useModulesStore((state) => state.deleteModule);
   const editModule = useModulesStore((state) => state.editModule);
   return (
     <div className="flex items-center gap-2">

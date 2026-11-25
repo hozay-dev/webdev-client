@@ -1,23 +1,34 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import AssignmentItem from "./AssignmentItem";
+import * as client from "../../client";
 import { useAssignmentsStore } from "../../../store/assignmentsStore";
 import { useAccountContext } from "../../../account/AccountContext";
 export default function Assignments() {
   const { cid } = useParams();
+  const courseId = String(cid);
   const { currentUser } = useAccountContext();
   // students can still look at assignments, only faculty can change them
   const isFaculty = currentUser?.role === "FACULTY";
-  const assignments = useAssignmentsStore((state) => state.assignments).filter(
-    (assignment) => assignment.course === cid,
-  );
+  const assignments = useAssignmentsStore((state) => state.assignments);
+  const setAssignments = useAssignmentsStore((state) => state.setAssignments);
   const deleteAssignment = useAssignmentsStore(
     (state) => state.deleteAssignment,
   );
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  useEffect(() => {
+    const load = async () => {
+      setAssignments(await client.findAssignmentsForCourse(courseId));
+    };
+    load();
+  }, [courseId]);
+  const onDeleteAssignment = async (assignmentId: string) => {
+    await client.deleteAssignment(assignmentId);
+    deleteAssignment(assignmentId);
+  };
   return (
     <div id="wd-assignments">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -96,7 +107,7 @@ export default function Assignments() {
               <button
                 type="button"
                 onClick={() => {
-                  deleteAssignment(deleteId);
+                  onDeleteAssignment(deleteId);
                   setDeleteId(null);
                 }}
                 className="rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white"

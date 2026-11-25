@@ -4,8 +4,10 @@ import { useParams, useRouter } from "next/navigation";
 import { FaAlignJustify } from "react-icons/fa6";
 import CourseNavigation from "./Navigation";
 import Breadcrumb from "./Breadcrumb";
+import * as client from "../client";
+import * as enrollmentsClient from "../../enrollments/client";
 import { useCoursesStore } from "../../store/coursesStore";
-import { useEnrollmentsStore } from "../../store/enrollmentsStore";
+import { useEnrollmentsStore, type Enrollment } from "../../store/enrollmentsStore";
 import { useAccountContext } from "../../account/AccountContext";
 export default function CoursesLayout({
   children,
@@ -15,10 +17,12 @@ export default function CoursesLayout({
   const { cid } = useParams();
   const courseId = typeof cid === "string" ? cid : "";
   const courses = useCoursesStore((state) => state.courses);
+  const setCourses = useCoursesStore((state) => state.setCourses);
   const course = courses.find((c) => c._id === courseId);
   const [showCourseNav, setShowCourseNav] = useState(true);
   const { currentUser } = useAccountContext();
   const enrollments = useEnrollmentsStore((state) => state.enrollments);
+  const setEnrollments = useEnrollmentsStore((state) => state.setEnrollments);
   const router = useRouter();
   // signed-out visitors can still open course pages (graders check modules that way).
   // only kick people out when they're signed in but not enrolled in this course.
@@ -29,10 +33,21 @@ export default function CoursesLayout({
         enrollment.user === currentUser._id && enrollment.course === courseId,
     );
   useEffect(() => {
-    if (currentUser && !enrolled) {
-      router.push("/dashboard");
-    }
-  }, [currentUser, enrolled, router]);
+    const load = async () => {
+      if (!currentUser) {
+        setCourses(await client.fetchAllCourses());
+        return;
+      }
+      setCourses(await client.findMyCourses());
+      const myEnrollments: Enrollment[] =
+        await enrollmentsClient.findEnrollmentsForUser(currentUser._id);
+      setEnrollments(myEnrollments);
+      if (!myEnrollments.some((enrollment) => enrollment.course === courseId)) {
+        router.push("/dashboard");
+      }
+    };
+    load();
+  }, [currentUser, courseId]);
   if (currentUser && !enrolled) return null;
   return (
     <div id="wd-courses">

@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import * as client from "../../../client";
 import {
   emptyAssignment,
   useAssignmentsStore,
@@ -21,26 +22,45 @@ const CHECK_ROW = "mb-2 flex items-center gap-2 text-sm";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
+  const courseId = String(cid);
   const router = useRouter();
   const { currentUser } = useAccountContext();
   const isFaculty = currentUser?.role === "FACULTY";
-  const assignments = useAssignmentsStore((state) => state.assignments);
+  const setAssignments = useAssignmentsStore((state) => state.setAssignments);
   const addAssignment = useAssignmentsStore((state) => state.addAssignment);
   const updateAssignment = useAssignmentsStore(
     (state) => state.updateAssignment,
   );
   // working on a copy so cancel doesnt change anything in the store
-  const [assignment, setAssignment] = useState<Assignment>(
-    assignments.find((a) => a._id === aid) ?? {
-      ...emptyAssignment,
-      course: String(cid),
-    },
-  );
-  const save = () => {
+  const [assignment, setAssignment] = useState<Assignment>({
+    ...emptyAssignment,
+    course: courseId,
+  });
+  useEffect(() => {
+    const load = async () => {
+      const assignments: Assignment[] =
+        await client.findAssignmentsForCourse(courseId);
+      setAssignments(assignments);
+      const found = assignments.find((a) => a._id === aid);
+      if (found) {
+        setAssignment(found);
+      }
+    };
+    load();
+  }, [courseId, aid]);
+  const onAddAssignment = async () => {
+    const created = await client.createAssignmentForCourse(courseId, assignment);
+    addAssignment(created);
+  };
+  const onUpdateAssignment = async (assignment: Assignment) => {
+    const saved = await client.updateAssignment(assignment);
+    updateAssignment(saved);
+  };
+  const save = async () => {
     if (aid === "new") {
-      addAssignment(assignment);
+      await onAddAssignment();
     } else {
-      updateAssignment(assignment);
+      await onUpdateAssignment(assignment);
     }
     router.push(`/courses/${cid}/assignments`);
   };

@@ -4,13 +4,21 @@ import {
   useModulesStore,
   type CourseModule,
 } from "../../../store/modulesStore";
-export default function Module({ module }: { module: CourseModule }) {
+export default function Module({
+  module,
+  onRemoveModule,
+  onUpdateModule,
+}: {
+  module: CourseModule;
+  onRemoveModule: (moduleId: string) => void;
+  onUpdateModule: (module: CourseModule) => void;
+}) {
   const updateModule = useModulesStore((state) => state.updateModule);
   return (
     <li className="wd-module mb-5 overflow-hidden border border-neutral-400 p-0 text-xl">
       <div className="wd-title flex items-center justify-between bg-neutral-200 p-3 ps-2">
         <span>
-          {/* pencil turns editing on, typing saves the name, enter turns editing off */}
+          {/* saves on enter */}
           {module.editing ? (
             <input
               className="w-1/2 rounded border border-neutral-300 px-2 py-1 text-base"
@@ -18,7 +26,7 @@ export default function Module({ module }: { module: CourseModule }) {
               onChange={(e) => updateModule({ ...module, name: e.target.value })}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  updateModule({ ...module, editing: false });
+                  onUpdateModule({ ...module, editing: false });
                 }
               }}
             />
@@ -26,7 +34,10 @@ export default function Module({ module }: { module: CourseModule }) {
             module.name
           )}
         </span>
-        <ModuleControlButtons moduleId={module._id} />
+        <ModuleControlButtons
+          moduleId={module._id}
+          deleteModule={onRemoveModule}
+        />
       </div>
       <ul className="wd-lessons m-0 list-none p-0">
         {module.lessons?.map((lesson) => (

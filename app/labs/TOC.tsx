@@ -34,6 +34,12 @@ const LINKS = [
     match: (p: string) => p.includes("/lab4"),
   },
   {
+    href: "/labs/lab5",
+    id: "wd-lab5-link",
+    label: "Lab 5",
+    match: (p: string) => p.includes("/lab5"),
+  },
+  {
     href: "/book/ch1",
     id: "wd-toc-book-link",
     label: "Chapter 1",
@@ -44,6 +50,24 @@ const LINKS = [
     href: "https://kambaz.dev/book/ch3",
     id: "wd-book-ch3-link",
     label: "Book Ch3",
+    match: () => false,
+  },
+  {
+    href: "https://github.com/hozay-dev/webdev-client",
+    id: "wd-github",
+    label: "GitHub",
+    match: () => false,
+  },
+  {
+    href: "https://github.com/hozay-dev/webdev-server",
+    id: "wd-github-node",
+    label: "Node GitHub",
+    match: () => false,
+  },
+  {
+    href: process.env.NEXT_PUBLIC_HTTP_SERVER ?? "",
+    id: "wd-http-server",
+    label: "Render",
     match: () => false,
   },
 ] as const;

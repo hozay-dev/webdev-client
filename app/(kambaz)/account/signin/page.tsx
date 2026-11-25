@@ -2,29 +2,36 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import * as db from "../../database";
+import * as client from "../client";
 import { useAccountContext } from "../AccountContext";
 export default function Signin() {
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { setCurrentUser } = useAccountContext();
   const router = useRouter();
-  const signin = () => {
-    const user = db.users.find(
-      (u) =>
-        u.username === credentials.username &&
-        u.password === credentials.password,
-    );
-    if (!user) return;
-    setCurrentUser(user);
-    // router in a click handler, redirect only works while rendering
-    router.push("/dashboard");
+  const signin = async () => {
+    if (!credentials.username || !credentials.password) return;
+    try {
+      const user = await client.signin(credentials);
+      if (!user) return;
+      setCurrentUser(user);
+      // router in a click handler, redirect only works while rendering
+      router.push("/dashboard");
+    } catch (error: any) {
+      setErrorMessage(error.response.data.message);
+    }
   };
   return (
     <div id="wd-signin-screen" className="max-w-sm">
       <h1 className="mb-3 text-2xl font-semibold">Sign in</h1>
+      {errorMessage && (
+        <p id="wd-signin-error-message" className="mb-2 rounded bg-red-100 px-3 py-2 text-red-800">
+          {errorMessage}
+        </p>
+      )}
       <input
         placeholder="username"
         id="wd-username"
